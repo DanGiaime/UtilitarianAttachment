@@ -16,6 +16,7 @@ public class UtilitarianAttachment {
         long startTime = System.nanoTime();
         String input = "";
         char[] inputSize = new char[6];
+        System.console().writer().println("Enter desired size: (max 6 digits)");
         System.console().reader().read(inputSize);
         for (int i = 0; i < 6; i++) {
             if(inputSize[i]!=' '){input+=inputSize[i];}
