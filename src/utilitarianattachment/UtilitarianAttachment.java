@@ -1,9 +1,14 @@
 package utilitarianattachment;
 
+import java.io.BufferedWriter;
+import java.io.File;
+import java.io.FileWriter;
 import java.io.IOException;
 import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.Random;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 
 /*
  * @author Dan Giaime
@@ -18,7 +23,9 @@ public class UtilitarianAttachment {
         System.console().writer().println("Enter desired size: (max 6 digits)");
         System.console().reader().read(inputSize);
         for (int i = 0; i < 6; i++) {
-            if(inputSize[i]!=' '){input+=inputSize[i];}
+            if (inputSize[i] != ' ') {
+                input += inputSize[i];
+            }
         }
         int size = Integer.parseInt(input.trim());
         //List of all nodes in graph
@@ -39,7 +46,7 @@ public class UtilitarianAttachment {
         currGraph.add(one);
         currGraph.add(two);
         currGraph.add(three);
-        
+
         //String to save for the sake of it being printed 50000 times
         String output = "Computing node ";
         //Loop (size) times to create the full graph
@@ -49,7 +56,7 @@ public class UtilitarianAttachment {
             //See whether or not the new node will 
             //connect with each current node individually
             currGraph.add(n);
-            System.console().writer().println(output+i);
+            System.console().writer().println(output + i);
             for (int j = 0; j < currGraph.size(); j++) {
                 currGraph.get(currGraph.size() - 1).tryToAdd(currGraph.get(j), r);
             }
@@ -58,7 +65,10 @@ public class UtilitarianAttachment {
         //short[][] triangles = matMult(
         //        matMult(adjacencyMatrix, adjacencyMatrix), adjacencyMatrix);
 
+        //Create a Hashmap for storing degree frequencies
         HashMap<Integer, Integer> degreeFreq = new HashMap<>();
+
+        //create degree distribution
         currGraph.stream().forEach((n) -> {
             if (!degreeFreq.containsKey(n.getDegree())) {
                 degreeFreq.put(n.getDegree(), 1);
@@ -66,23 +76,36 @@ public class UtilitarianAttachment {
                 degreeFreq.replace(n.getDegree(), degreeFreq.get(n.getDegree()) + 1);
             }
         });
-        System.console().writer().println("----------");
-        System.console().writer().println("Frequency to copy");
-        degreeFreq.forEach((k, v) -> {
-            System.console().writer().println(v);
-        });
-        System.console().writer().println("----------");
-        System.console().writer().println("Degree to copy");
-        degreeFreq.forEach((k, v) -> {
-            System.console().writer().println(k);
-        });
+
+        //Start writing data to file
+        BufferedWriter bw = new BufferedWriter(new FileWriter("data.txt", true));
+        bw.write("-------------"+size+"-------------");
+        bw.newLine();
+        //Print data summation
         System.console().writer().println("----------");
         System.console().writer().println("Summation of data: ");
         degreeFreq.forEach((k, v) -> {
             System.console().writer().println(v + " nodes have degree " + k);
         });
-        System.console().writer().println("Program took " + (System.nanoTime() - 
-                startTime)/1000000000 + " seconds");
+
+        //Write to file
+        degreeFreq.forEach((k, v) -> {
+            try {
+                bw.write(k + "\t" + v);
+                bw.newLine();
+            } catch (IOException ex) {
+                Logger.getLogger(UtilitarianAttachment.class.getName()).log(Level.SEVERE, null, ex);
+                System.console().writer().println("Fucked up writing");
+            }
+        });
+
+        //Close writer
+        bw.close();
+        System.console().writer().println("Finished writing");
+
+        //Print run time
+        System.console().writer().println("Program took " + (System.nanoTime()
+                - startTime) / 1000000000 + " seconds");
     }
 
     /*
