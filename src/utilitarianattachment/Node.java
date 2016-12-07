@@ -23,12 +23,10 @@ public class Node {
         myNeighbors = new HashSet<>();
     }
     
-    public boolean tryToAdd(Node possNeighbor, Random r) {
+    public boolean tryToAdd(Node possNeighbor, Random r ){
         if (r.nextDouble() < myProbAttach*possNeighbor.getProbAttach()) {
             myNeighbors.add(possNeighbor);
             possNeighbor.add(this);
-            System.out.println("Added a link, node now has degree " + myNeighbors.size());
-            calcProb();
             return true;
         } else {
             return false;
@@ -36,17 +34,17 @@ public class Node {
     }
     
     public void calcProb(){
-        System.out.println(myProbAttach);
-        myProbAttach = 1-(((myNeighbors.size()+1)*
+        myProbAttach = (((myNeighbors.size()+1)*
                 Math.pow(Math.E, -(myNeighbors.size()+1)/150))/(myNeighbors.size()+2) - 
                 (myNeighbors.size()*
                 Math.pow(Math.E, -myNeighbors.size()/150))/(myNeighbors.size()+1));
-        System.out.println(myProbAttach);
+        if(myProbAttach>1){System.out.println("Wrong");}
     }
     
     public void add(Node n){
         myNeighbors.add(n);
         n.getNeighbors().add(this);
+        calcProb();
     }
     
     public boolean hasNeighbor(Node possNeighbor){
