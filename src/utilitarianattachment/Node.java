@@ -19,8 +19,8 @@ public class Node {
     private HashSet<Node> myNeighbors;
 
     public Node(){
-        myProbAttach = 1;
         myNeighbors = new HashSet<>();
+        calcProb();
     }
     
     public boolean tryToAdd(Node possNeighbor, Random r ){
@@ -33,7 +33,7 @@ public class Node {
         }
     }
     
-    public void calcProb(){
+    private void calcProb(){
         myProbAttach = (((myNeighbors.size()+1)*
                 Math.pow(Math.E, -(myNeighbors.size()+1)/150))/(myNeighbors.size()+2) - 
                 (myNeighbors.size()*

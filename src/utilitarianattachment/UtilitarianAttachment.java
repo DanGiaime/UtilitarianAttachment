@@ -2,7 +2,6 @@ package utilitarianattachment;
 
 import java.io.IOException;
 import java.util.ArrayList;
-import java.util.Dictionary;
 import java.util.HashMap;
 import java.util.Random;
 
@@ -60,13 +59,13 @@ public class UtilitarianAttachment {
         //        matMult(adjacencyMatrix, adjacencyMatrix), adjacencyMatrix);
 
         HashMap<Integer, Integer> degreeFreq = new HashMap<>();
-        for (Node n : currGraph) {
+        currGraph.stream().forEach((n) -> {
             if (!degreeFreq.containsKey(n.getDegree())) {
                 degreeFreq.put(n.getDegree(), 1);
             } else {
                 degreeFreq.replace(n.getDegree(), degreeFreq.get(n.getDegree()) + 1);
             }
-        }
+        });
         System.console().writer().println("----------");
         System.console().writer().println("Frequency to copy");
         degreeFreq.forEach((k, v) -> {
