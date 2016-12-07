@@ -5,6 +5,8 @@
  */
 package utilitarianattachment;
 
+import java.util.Arrays;
+import java.util.HashMap;
 import java.util.HashSet;
 import java.util.Random;
 
@@ -17,14 +19,14 @@ public class Node {
     private HashSet<Node> myNeighbors;
 
     public Node(){
-        myProbAttach = .1;
-        myNeighbors = new HashSet<Node>();
+        myProbAttach = 1;
+        myNeighbors = new HashSet<>();
     }
     
     public boolean tryToAdd(Node possNeighbor, Random r) {
-        if (r.nextDouble() < getProbAttach()) {
-            System.out.println(myNeighbors.add(possNeighbor));
-            possNeighbor.getNeighbors().add(this);
+        if (r.nextDouble() < myProbAttach*possNeighbor.getProbAttach()) {
+            myNeighbors.add(possNeighbor);
+            possNeighbor.add(this);
             System.out.println("Added a link, node now has degree " + myNeighbors.size());
             calcProb();
             return true;
@@ -34,7 +36,12 @@ public class Node {
     }
     
     public void calcProb(){
-        myProbAttach = (myNeighbors.size()*Math.pow(Math.E, myNeighbors.size()*150))/150; 
+        System.out.println(myProbAttach);
+        myProbAttach = 1-(((myNeighbors.size()+1)*
+                Math.pow(Math.E, -(myNeighbors.size()+1)/150))/(myNeighbors.size()+2) - 
+                (myNeighbors.size()*
+                Math.pow(Math.E, -myNeighbors.size()/150))/(myNeighbors.size()+1));
+        System.out.println(myProbAttach);
     }
     
     public void add(Node n){
@@ -66,4 +73,5 @@ public class Node {
     public HashSet<Node> getNeighbors() {
         return myNeighbors;
     }
+
 }
