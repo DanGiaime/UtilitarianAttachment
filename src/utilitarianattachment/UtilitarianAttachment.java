@@ -100,12 +100,15 @@ public class UtilitarianAttachment {
         });
 
         //Close writer
-        bw.close();
-        System.console().writer().println("Finished writing");
-
-        //Print run time
+        
         System.console().writer().println("Program took " + (System.nanoTime()
                 - startTime) / 1000000000 + " seconds");
+        bw.write("Time: "+(System.nanoTime()
+                - startTime) / 1000000000);
+        bw.close();
+        
+
+        //Print run time
     }
 
     /*
